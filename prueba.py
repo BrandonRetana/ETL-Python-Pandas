@@ -22,7 +22,6 @@ def generate_new_columns(df):
             if counter == 4: 
                 counter = 2  
 
-            counter2 = 0
             if counter2 == 2:
                 counter = 1
             continue
@@ -34,6 +33,7 @@ def generate_new_columns(df):
             Distrito = row[0]
             NewRow = (Provincia, Canton, Distrito, "", "", "")
             new_df = new_df.union(spark.createDataFrame(data =[NewRow], schema = columns))
+        counter2 = 0
     
     return new_df
     
