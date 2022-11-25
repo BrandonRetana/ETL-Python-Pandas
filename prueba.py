@@ -2,7 +2,15 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import ltrim,rtrim,trim,col
 from pyspark.sql.functions import *
 from pyspark import SparkContext
-spark = SparkSession.builder.appName("MyFirstCSV").getOrCreate()
+import pyspark
+from pyspark.sql import Row
+
+
+
+spark = SparkSession.builder.config("spark.jars", "postgresql-42.5.1.jar") \
+	.master("local").appName("PySpark_Postgres_test").getOrCreate()
+
+
 
 oij_df = spark.read.csv( path="OIJ.csv", sep=",", header=True,quote='"',inferSchema=True,)
 inec_df = spark.read.csv( path="INEC.csv", sep=";", header=True,quote='"',inferSchema=True,)
@@ -37,4 +45,10 @@ def generate_new_columns(df):
     
     return new_df
     
-generate_new_columns(inec_df).show(200)
+df = generate_new_columns(inec_df)
+
+url = "jdbc:postgresql://localhost:5432/etl"
+mode = "overwrite"
+properties = {"user": "postgres", " password": "Legolas00", "driver": "org.postgresql.Driver"}
+
+df.write.jdbc(url=url, table="test", mode=mode, properties=properties)
