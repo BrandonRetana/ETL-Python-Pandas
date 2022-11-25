@@ -4,8 +4,9 @@ from pyspark.sql.functions import *
 from pyspark import SparkContext
 spark = SparkSession.builder.appName("MyFirstCSV").getOrCreate()
 
-oij_df = spark.read.csv( path="OIJ.csv", sep=",", header=True,quote='"',inferSchema=True,)
+oij_df = spark.read.csv( path="OIJ.csv", sep=";", header=True,quote='"',inferSchema=True,)
 inec_df = spark.read.csv( path="INEC.csv", sep=";", header=True,quote='"',inferSchema=True,)
+
 
 def generate_new_columns(df):
     columns = ["Provincia", "Canton", "Distrito","Tasa neta de participación", "Porcentaje de población económicamente inactiva", "Relación de dependencia económica"]
@@ -36,5 +37,29 @@ def generate_new_columns(df):
         counter2 = 0
     
     return new_df
-    
-generate_new_columns(inec_df).show(200)
+
+inec_df = generate_new_columns(inec_df)
+
+def find_non_matches(df1,df2):
+    non_matches = []
+    is_match = False
+    non_match = ''
+
+    for row in df1.collect():
+        for row2 in df2.collect():
+            if row['Provincia'] == row2['Provincia'] and row['Canton'] == row2['Canton'] and row['Distrito'] == row2['Distrito']:
+                is_match = True
+                break
+        if is_match == False:
+            non_match = row['Provincia'] 
+
+            non_matches.append(non_match)
+        is_match = False
+    return non_matches
+
+non_matches = find_non_matches(oij_df,inec_df)
+
+for value in non_matches:
+    print(value)
+
+
