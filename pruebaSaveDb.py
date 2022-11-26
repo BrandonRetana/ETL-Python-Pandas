@@ -1,3 +1,4 @@
+'''
 import pyspark
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
@@ -22,3 +23,18 @@ mode = "overwrite"
 properties = {"user": "postgres", " password": "Legolas00", "driver": "org.postgresql.Driver"}
 
 df.write.jdbc(url=url, table="test", mode=mode, properties=properties)
+'''
+
+
+import pandas
+import matplotlib.pyplot as plt
+from sqlalchemy import create_engine
+import psycopg2
+
+# Connect to an existing database
+conn = psycopg2.connect("host=localhost dbname=etl user=postgres password=Legolas00")
+engine = create_engine('postgresql://postgres:Legolas00@localhost:5432/etl')
+df = pandas.read_sql_query('
+df.plot.bar(x='distrito', y=['Tasa de ocupación', 'Cantidad de delitos'], rot=0)
+plt.show()
+
