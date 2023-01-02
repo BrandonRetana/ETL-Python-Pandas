@@ -11,11 +11,15 @@ This project aims to extract, transform and load data from the OIJ and INEC to o
 
 Clone this repository on your local machine:
 
-`git clone https://github.com/BrandonRetana/ETL-Python-Pandas.git`
+```bash
+git clone https://github.com/BrandonRetana/ETL-Python-Pandas.git
+```
 
 Install necessary dependencies with pip:
 
-`pip install pandas && pip install matplotlib && pip install sqlalchemy`
+```bash
+pip install pandas && pip install matplotlib && pip install sqlalchemy
+```
 
 ## Usage
 
